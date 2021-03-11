@@ -6,7 +6,7 @@ All rights reserved.
 
 int UMIServo::_convert_to_servo(const int& target_pos)
 {
-	return target_pos + 60;
+	return target_pos + 90;
 }
 
 void UMIServo::_write(const int& target_pos)
@@ -32,8 +32,8 @@ void UMIServo::_write_smooth(const int& target_pos)
 
 UMIServo::UMIServo(void):
   curr_pos_(0),
-  min_pos_(-60),
-  max_pos_(60),
+  min_pos_(-90),
+  max_pos_(90),
   initialized_(false),
   error_(false),
   error_message_("")
