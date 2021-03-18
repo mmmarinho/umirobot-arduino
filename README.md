@@ -1,3 +1,3 @@
 # umirobot-arduino
 
-[![arduino-library-badge](https://www.ardu-badge.com/badge/MD_PWM.svg?)](https://www.ardu-badge.com/UMIRobot)
+[![arduino-library-badge](https://www.ardu-badge.com/badge/UMIRobot.svg?)](https://www.ardu-badge.com/UMIRobot)
