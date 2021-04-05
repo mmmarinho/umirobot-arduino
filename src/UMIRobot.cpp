@@ -1,5 +1,22 @@
 #include <UMIRobot.h>
+/**
+(c) 2020-2021, Murilo M. Marinho.
 
+    This file is part of umirobot-arduino.
+
+    umirobot-arduino is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    umirobot-arduino is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with umirobot-arduino.  If not, see <https://www.gnu.org/licenses/>.
+*/
 UMIRobot::UMIRobot(const int& dof):
   dof_(dof),
   q_(new int[dof_]),
@@ -29,7 +46,7 @@ UMIRobot::~UMIRobot()
   delete potentiometer_values_;
 }
 
-void UMIRobot::attach(const int& servo_index, const int& port)
+void UMIRobot::attachServo(const int& servo_index, const int& port)
 {
   if (servo_index > dof_)
     return;
@@ -38,7 +55,7 @@ void UMIRobot::attach(const int& servo_index, const int& port)
   servos_[servo_index].attach(port);
 }
 
-void UMIRobot::attach_all(int ports[])
+void UMIRobot::attachServos(int ports[])
 {
   for (int i = 0; i < dof_; i++)
   {
@@ -46,7 +63,7 @@ void UMIRobot::attach_all(int ports[])
   }  
 }
 
-void UMIRobot::set_potentiometer_ports(int ports[])
+void UMIRobot::attachPotentiometers(int ports[])
 {
   for (int i = 0; i < dof_; i++)
   {
@@ -96,12 +113,12 @@ void UMIRobot::update()
   }
 }
 
-void UMIRobot::set_serial(Stream& stream)
+void UMIRobot::attachSerial(Stream& stream)
 {
 	serial_ = &stream;
 }
 
-void UMIRobot::send_information_to_serial() const
+void UMIRobot::writeToSerial() const
 {
   for (int i = 0; i < dof_; i++)
   {
@@ -116,7 +133,7 @@ void UMIRobot::send_information_to_serial() const
   serial_->println("UMI");
 }
 
-void UMIRobot::get_qd_from_serial() 
+void UMIRobot::readFromSerial() 
 {
   int qd[dof_];
   if (serial_->available())

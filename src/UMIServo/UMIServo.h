@@ -1,9 +1,22 @@
 #include <Arduino.h>
 #include <Servo.h>
 /**
-(c) 2020, Murilo M. Marinho, All rights reserved.
-UMIServo: Controls a servo in the interval -60 to 60 degrees, with 
-automatic smoothing.
+(c) 2020-2021, Murilo M. Marinho.
+
+    This file is part of umirobot-arduino.
+
+    umirobot-arduino is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    umirobot-arduino is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with umirobot-arduino.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #ifndef UMIServo_HEADER_GUARD

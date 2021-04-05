@@ -12,10 +12,12 @@ UMIRobot 	KEYWORD1
 # Methods and Functions (KEYWORD2)
 #######################################
 
-attach_all	KEYWORD2
-set_serial	KEYWORD2
-set_potentiometer_ports	KEYWORD2
+attachSerial	KEYWORD2
+attachServos	KEYWORD2
+attachPotentiometers	KEYWORD2
 update	KEYWORD2
+readFromSerial	KEYWORD2
+writeToSerial	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
