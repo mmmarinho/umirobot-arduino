@@ -7,16 +7,16 @@ int potentiometer_ports[] = {0, 1, 2, 3, 4, 5};
 
 void setup()
 {
-  robot.attach_all(servo_ports);
-  robot.set_potentiometer_ports(potentiometer_ports);
+  robot.attachServos(servo_ports);
+  robot.attachPotentiometers(potentiometer_ports);
   Serial.begin(115200);
-  robot.set_serial(Serial);
+  robot.attachSerial(Serial);
 }
 
 void loop()
 {
   robot.update();
-  robot.get_qd_from_serial();
-  robot.send_information_to_serial();
+  robot.readFromSerial();
+  robot.writeToSerial();
   delay(10);
 }
