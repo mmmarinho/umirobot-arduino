@@ -1,6 +1,6 @@
 #include <UMIRobot.h>
 /**
-(c) 2020-2021, Murilo M. Marinho.
+(c) 2020-2022, Murilo M. Marinho.
 
     This file is part of umirobot-arduino.
 
@@ -17,23 +17,37 @@
     You should have received a copy of the GNU General Public License
     along with umirobot-arduino.  If not, see <https://www.gnu.org/licenses/>.
 */
-UMIRobot::UMIRobot(const int& dof):
-  dof_(dof),
-  q_(new int[dof_]),
-  qd_(new int[dof_]),
-  potentiometer_values_(new int[dof_]),
-  potentiometer_ports_(new int[dof_]),
-  servos_(new UMIServo[dof_]),
+UMIRobot::UMIRobot(const int& servo_count,
+                   const int& potentiometer_count,
+                   const int& digital_in_count) :
+  q_(new int[servo_count]),
+  qd_(new int[servo_count]),
+  potentiometer_count_(potentiometer_count),
+  potentiometer_ports_(new int[potentiometer_count]),
+  potentiometer_values_(new int[potentiometer_count]),
+  digital_in_count_(digital_in_count),
+  digital_in_ports_(new int[digital_in_count]),
+  digital_in_values_(new int[digital_in_count]),
+  servo_count_(servo_count),
+  servos_(new UMIServo[servo_count]),
   initialized_(false),
   error_(false),
   error_message_("")
 {
-	for(int i=0;i<dof;i++)
+	for(int i=0; i < servo_count; i++)
 	{
 		q_[i]=0;
 		qd_[i]=0;
-		potentiometer_values_[i]=0;
-		potentiometer_ports_[i]=0;
+	}
+	for (int i = 0; i < potentiometer_count; i++)
+	{
+		potentiometer_values_[i] = 0;
+		potentiometer_ports_[i] = 0;
+	}
+	for (int i = 0; i < digital_in_count; i++)
+	{
+		digital_in_values_[i] = 0;
+		digital_in_ports_[i] = 0;
 	}
 }
 
@@ -44,11 +58,13 @@ UMIRobot::~UMIRobot()
   delete servos_;
   delete potentiometer_ports_;
   delete potentiometer_values_;
+  delete digital_in_ports_;
+  delete digital_in_values_;
 }
 
 void UMIRobot::attachServo(const int& servo_index, const int& port)
 {
-  if (servo_index > dof_)
+  if (servo_index > servo_count_)
     return;
   if (servo_index < 0)
     return;
@@ -57,7 +73,7 @@ void UMIRobot::attachServo(const int& servo_index, const int& port)
 
 void UMIRobot::attachServos(int ports[])
 {
-  for (int i = 0; i < dof_; i++)
+  for (int i = 0; i < servo_count_; i++)
   {
     servos_[i].attach(ports[i]);
   }  
@@ -65,20 +81,38 @@ void UMIRobot::attachServos(int ports[])
 
 void UMIRobot::attachPotentiometers(int ports[])
 {
-  for (int i = 0; i < dof_; i++)
+  for (int i = 0; i < potentiometer_count_; i++)
   {
     potentiometer_ports_[i] = ports[i];
   }  
 }
 
-int UMIRobot::get_dof() const
+void UMIRobot::attachDigitalInputs(int ports[])
 {
-  return dof_;
+	for (int i = 0; i < digital_in_count_; i++)
+	{
+		digital_in_ports_[i] = ports[i];
+	}
+}
+
+int UMIRobot::get_servo_count() const
+{
+  return servo_count_;
+}
+
+int UMIRobot::get_potentiometer_count() const
+{
+	return potentiometer_count_;
+}
+
+int UMIRobot::get_digital_in_count() const
+{
+	return digital_in_count_;
 }
 
 void UMIRobot::write(int qd[])
 {
-  for (int i = 0; i < dof_; i++)
+  for (int i = 0; i < servo_count_; i++)
   {
     qd_[i]=qd[i];
   }
@@ -89,12 +123,12 @@ void UMIRobot::update()
   if(error_)
 	return;
 	
-  for (int i = 0; i < dof_; i++)
+  for (int i = 0; i < servo_count_; i++)
   {
     if(!servos_[i].is_initialized())
 	{
 	  error_=true;
-	  error_message_ = "[Error] Called UMIRobot::write() without UMIRobot::attach() for all DoFs.";
+	  error_message_ = "[Error] Called UMIRobot::write() without UMIRobot::attach() for all servos.";
 	  return;
 	}
 	if(servos_[i].is_error())
@@ -105,11 +139,18 @@ void UMIRobot::update()
 	}
   }
 	
-  for (int i = 0; i < dof_; i++)
+  for (int i = 0; i < servo_count_; i++)
   {
     q_[i] = servos_[i].read();
 	servos_[i].write(qd_[i]);
-	potentiometer_values_[i] = analogRead(potentiometer_ports_[i]);
+  }
+  for (int i = 0; i < potentiometer_count_; i++)
+  {
+	  potentiometer_values_[i] = analogRead(potentiometer_ports_[i]);
+  }
+  for (int i = 0; i < digital_in_count_; i++)
+  {
+	  digital_in_values_[i] = digitalRead(digital_in_ports_[i]);
   }
 }
 
@@ -120,14 +161,25 @@ void UMIRobot::attachSerial(Stream& stream)
 
 void UMIRobot::writeToSerial() const
 {
-  for (int i = 0; i < dof_; i++)
+  serial_->print(servo_count_);
+  serial_->print(" ");
+  for (int i = 0; i < servo_count_; i++)
   {
-    serial_->print(q_[i]);
+	serial_->print(q_[i]);
     serial_->print(" ");
   }
-  for (int i = 0; i < dof_; i++)
+  serial_->print(potentiometer_count_);
+  serial_->print(" ");
+  for (int i = 0; i < potentiometer_count_; i++)
   {
     serial_->print(potentiometer_values_[i]);
+	serial_->print(" ");
+  }
+  serial_->print(digital_in_count_);
+  serial_->print(" ");
+  for (int i = 0; i < digital_in_count_; i++)
+  {
+	serial_->print(digital_in_values_[i]);
 	serial_->print(" ");
   }
   serial_->println("UMI");
@@ -135,10 +187,10 @@ void UMIRobot::writeToSerial() const
 
 void UMIRobot::readFromSerial() 
 {
-  int qd[dof_];
+  int qd[servo_count_];
   if (serial_->available())
   {
-    for(int i=0;i<dof_;i++)
+    for(int i=0;i<servo_count_;i++)
     {
       qd[i]=serial_->parseInt();
     }

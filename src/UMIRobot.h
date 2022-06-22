@@ -1,6 +1,6 @@
 #include "UMIServo/UMIServo.h"
 /**
-(c) 2020-2021, Murilo M. Marinho.
+(c) 2020-2022, Murilo M. Marinho.
 
     This file is part of umirobot-arduino.
 
@@ -23,34 +23,49 @@
 class UMIRobot
 {
   private:
-    const int dof_;
     int* q_;
 	int* qd_;
-	int* potentiometer_values_;
+
+	const int potentiometer_count_;
 	int* potentiometer_ports_;
-    UMIServo* servos_;
+	int* potentiometer_values_;
 	
+	const int digital_in_count_;
+	int* digital_in_ports_;
+	int* digital_in_values_;
+	
+	const int servo_count_;
+	UMIServo* servos_;
+		
 	Stream* serial_;
 
 	bool initialized_;
 	bool error_;
 	String error_message_;
   public:
-    UMIRobot(const int& dof);
+    UMIRobot(const int& servo_count,
+		     const int& potentiometer_count,
+		     const int& digital_in_count);
 	~UMIRobot();
 
     void attachServo(const int& servo_index, const int& port);
 	void attachServos(int ports[]);
-    int get_dof() const;
-    void write(int qd[]);
+	void attachPotentiometers(int ports[]);
+	void attachDigitalInputs(int ports[]);
+
+	void write(int qd[]);
 	void update();
     int* read();
 	
 	void attachSerial(Stream& serial);
-	void attachPotentiometers(int ports[]);
+
 	void writeToSerial() const;
 	void readFromSerial();
 	
+	int get_servo_count() const;
+	int get_potentiometer_count() const;
+	int get_digital_in_count() const;
+
 	bool is_initialized() const;
 	bool is_error() const;
 	String get_error_message() const;
