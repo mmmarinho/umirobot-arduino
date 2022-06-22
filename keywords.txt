@@ -15,6 +15,7 @@ UMIRobot 	KEYWORD1
 attachSerial	KEYWORD2
 attachServos	KEYWORD2
 attachPotentiometers	KEYWORD2
+attachDigitalInputs	KEYWORD2
 update	KEYWORD2
 readFromSerial	KEYWORD2
 writeToSerial	KEYWORD2
