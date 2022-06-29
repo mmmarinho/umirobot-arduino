@@ -71,7 +71,7 @@ void UMIRobot::attachServo(const int &servo_index, const int &port)
   servos_[servo_index].attach(port);
 }
 
-void UMIRobot::attachServos(int ports[])
+void UMIRobot::attachServos(const int ports[])
 {
   for (int i = 0; i < servo_count_; i++)
   {
@@ -79,7 +79,7 @@ void UMIRobot::attachServos(int ports[])
   }
 }
 
-void UMIRobot::attachPotentiometers(int ports[])
+void UMIRobot::attachPotentiometers(const int ports[])
 {
   for (int i = 0; i < potentiometer_count_; i++)
   {
@@ -87,12 +87,12 @@ void UMIRobot::attachPotentiometers(int ports[])
   }
 }
 
-void UMIRobot::attachDigitalInputs(int ports[], int port_modes[])
+void UMIRobot::attachDigitalInputs(const int ports[], const int port_modes[])
 {
   for (int i = 0; i < digital_in_count_; i++)
   {
-    pinMode(ports[i], port_modes[i])
-        digital_in_ports_[i] = ports[i];
+    pinMode(ports[i], port_modes[i]);
+    digital_in_ports_[i] = ports[i];
   }
 }
 

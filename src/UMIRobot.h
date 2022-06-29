@@ -19,6 +19,7 @@
 #ifndef UMIRobot_HEADER_GUARD
 #define UMIRobot_HEADER_GUARD
 #include "UMIServo/UMIServo.h"
+#include "UMIRobotTemplates.h"
 
 class UMIRobot
 {
@@ -50,9 +51,9 @@ public:
 	~UMIRobot();
 
 	void attachServo(const int &servo_index, const int &port);
-	void attachServos(int ports[]);
-	void attachPotentiometers(int ports[]);
-	void attachDigitalInputs(int ports[]);
+	void attachServos(const int ports[]);
+	void attachPotentiometers(const int ports[]);
+	void attachDigitalInputs(const int ports[], const int port_modes[]);
 
 	void write(int qd[]);
 	void update();
